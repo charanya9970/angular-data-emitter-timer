@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy,  OnInit, Output } from "@angular/core";
-import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { of, Subscription, timer } from "rxjs";
 import { catchError, filter, switchMap } from "rxjs/operators";
 
@@ -24,12 +24,13 @@ export class DataEmitterComponent implements OnInit, OnDestroy {
     this.subscription = timer(0, this.minutes)
       .pipe(
         switchMap(() => {
-          return this.getData()
-            .pipe(catchError(err => {
+          return this.getData().pipe(
+            catchError(err => {
               // Handle errors
               console.error(err);
               return of(undefined);
-            }));
+            })
+          );
         }),
         filter(data => data !== undefined)
       )
@@ -44,7 +45,6 @@ export class DataEmitterComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    return this.http
-      .get(this.apiUrl);
+    return this.http.get(this.apiUrl);
   }
 }
